@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Anniversary!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(135deg, #fff5f6 0%, #fff 50%, #fff5f6 100%);
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .header {
+            text-align: center;
+            margin: 30px 20px;
+            padding: 0 15px;
+            color: #ff8fa3;
+            animation: fadeInDown 1.5s ease-out;
+            width: 100%;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            word-wrap: break-word;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ff8fa3, transparent);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .photo-slider {
+            width: 100%;
+            max-width: 1200px;
+            height: auto;
+            min-height: 300px;
+            margin: 20px auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 20px;
+            perspective: 1000px;
+        }
+
+        .photo-container {
+            width: min(300px, 80vw);
+            height: min(300px, 80vw);
+            margin: 0 15px;
+            position: relative;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .photo-frame {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .photo-container:hover .photo-frame {
+            transform: rotateY(180deg);
+        }
+
+        .photo-front, .photo-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .photo-front::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.3)
+            );
+            transform: skewX(-25deg);
+            transition: 0.5s;
+        }
+
+        .photo-container:hover .photo-front::before {
+            animation: shine 1s;
+        }
+
+        @keyframes shine {
+            100% {
+                left: 150%;
+            }
+        }
+
+        .photo-back {
+            transform: rotateY(180deg);
+            padding: 20px;
+            text-align: center;
+            color: #ff8fa3;
+            background: #fff5f6;
+            font-weight: bold;
+        }
+
+        .photo-back p {
+            font-size: clamp(0.8rem, 3vw, 1rem);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease-out 0.3s;
+        }
+
+        .photo-container:hover .photo-back p {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: min(40px, 10vw);
+            height: min(40px, 10vw);
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            color: #ff8fa3;
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider-btn:hover {
+            transform: translateY(-50%) scale(1.1);
+            background: #ff8fa3;
+            color: white;
+        }
+
+        .slider-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .slider-btn.left { left: 5px; }
+        .slider-btn.right { right: 5px; }
+
+        .message {
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: clamp(20px, 5vw, 30px);
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .message::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255,143,163,0.1), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+
+        .message:hover::before {
+            transform: translateX(100%);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message h2 {
+            color: #ff8fa3;
+            margin-bottom: 20px;
+            font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+            position: relative;
+            display: inline-block;
+        }
+
+        .message h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ff8fa3, transparent);
+        }
+
+        .message p {
+            line-height: 1.8;
+            color: #666;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+        }
+
+        .floating-heart {
+            position: fixed;
+            animation: float 3s ease-in-out infinite;
+            opacity: 0;
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+            50% { 
+                transform: translateY(-20px) rotate(10deg) scale(1.1);
+            }
+        }
+
+        .love-btn {
+            padding: clamp(10px, 3vw, 15px) clamp(20px, 5vw, 30px);
+            font-size: clamp(1rem, 2.5vw, 1.125rem);
+            background: linear-gradient(45deg, #ff8fa3, #ff758c);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin: 20px;
+            box-shadow: 0 5px 15px rgba(255,143,163,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .love-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(255,143,163,0.4);
+        }
+
+        .love-btn:active {
+            transform: translateY(1px) scale(0.95);
+        }
+
+        .love-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .love-btn:hover::before {
+            left: 100%;
+        }
+
+        .music-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .music-toggle:hover {
+            transform: scale(1.1);
+            background: #ff8fa3;
+            color: white;
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+
+        .loader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .heart-loader {
+            font-size: 40px;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Parallax scrolling effect for messages */
+        .parallax {
+            transform: translateZ(-1px) scale(2);
+            z-index: -1;
+        }
+        .video-container {
+    width: 90%;
+    max-width: 800px;
+    margin: 40px auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.video-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, #ff8fa3, #ff758c);
+}
+
+.video-container h2 {
+    color: #ff8fa3;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+}
+
+.video-love {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.video-love video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+    .video-container {
+        width: 95%;
+        padding: 15px;
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader">
+        <div class="heart-loader">💖</div>
+    </div>
+
+    <div class="header">
+        <h1>✨ สุขสันต์วันครบรอบ 3 ปี นะจ๊ะเบบี๋ ✨</h1>
+    </div>
+
+    <div class="photo-slider" id="slider1">
+        
+        <div class="photo-container">
+            <div class="photo-frame">
+                <div class="photo-front">
+                    <img src="/image/LINE_ALBUM_27665_250106_1.jpg" alt="ภาพที่ 1" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
+                </div>
+                <div class="photo-back">
+                    <p>นี่ !!!!  เป็นไงสมัยเอ๊าะๆ  
+                        <br>  น่ารักเกินนน!!!  </br>
+                    </p>
+                </div>
+            </div>
+        </div>
+    
+        <div class="photo-container">
+            <div class="photo-frame">
+                <div class="photo-front">
+                    <img src="/image/LINE_ALBUM_27665_250106_2.jpg" alt="ภาพที่ 2" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
+                </div>
+                <div class="photo-back">
+                    <p> อันนี้เริ่มโตเป็น สวยแยะ 552453555667</p>
+                </div>
+            </div>
+        </div>
+    
+        <div class="photo-container">
+            <div class="photo-frame">
+                <div class="photo-front">
+                    <img src="/image/LINE_ALBUM_27665_250106_3.jpg" alt="ภาพที่ 3" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
+                </div>
+                <div class="photo-back">
+                    <p>อันนี้เริ่มไปเป็นคนเท่แยะ 557556445</p>
+                </div>
+            </div>
+        </div>
+    
+    </div>
+
+    <div class="message">
+        <h2>💝 ขอบคุณที่เข้ามาในชีวิตเค้านะ 💝</h2>
+        <p>ทุกๆ วันที่เราได้อยู่ด้วยกัน เค้ามีความสุขเสมอเยย
+            <br>เธออ่ะ ดีใจที่มีเค้ามั้ยย  เค้าดีใจมากเยยนะ
+            <br>ถึงแม้แฟนจะไม่มาจีบตอน ป.2 ก็เหอะ หุ๊ๆ
+        </p>
+    </div>
+
+    <div class="video-container">
+        <h2>💑 Our Special Moments 💑</h2>
+        <div class="video-love">
+            <iframe 
+                width="756" 
+                height="450" 
+                src="https://www.youtube.com/embed/bphZ8FAOnhU" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <div class="photo-slider" id="slider2">
+        
+        <div class="photo-container">
+            <div class="photo-frame">
+                <div class="photo-front">
+                    <img src="/image/S__15007765.jpg" alt="ภาพที่ 1" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
+                </div>
+                <div class="photo-back">
+                    <p> มันแบบอยากเล่นกะหมามะพร้าวมากอันนี้</p>
+                </div>
+            </div>
+        </div>
+    
+        <div class="photo-container">
+            <div class="photo-frame">
+                <div class="photo-front">
+                    <img src="/image/S__15007764.jpg" alt="ภาพที่ 2" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
+                </div>
+                <div class="photo-back">
+                    <p>แต่แฟนพาไปเที่ยวแยะเอาของให้วันเกิดน่ารักสุดๆอ่ะ จู๊ฟม๊วบบบ </p>
+                </div>
+            </div>
+        </div>
+    
+        <div class="photo-container">
+            <div class="photo-frame">
+                <div class="photo-front">
+                    <img src="/image/S__15007778.jpg" alt="ภาพที่ 3" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
+                </div>
+                <div class="photo-back">
+                    <p>อันนี้เป็นคนดีแหละ แต่อยากได้ภาพนิดนุงง 556566577</p>
+                </div>
+            </div>
+        </div>
+    
+    </div>
+
+    <div class="message">
+        <h2>💝 อยู่ไปเที่ยวกับเค้าเยอะๆนะ 💝</h2>
+        <p> เค้าคิดถึงเธอเสมอ แหละแป๊ะเอ๋อ รักเธอมาก รู้ว่าเราไกล กันแต่
+            เธอก็ยังเป็นคนที่เค้าคิดถึงที่สุด แม้จะไม่ได้เจอกันแต่ส่งฟามเฮ้าส์หาได้นะ
+            อยากไปเที่ยวกับเธอนานๆแยะตลอดไปปป
+        </p>
+    </div>
+
+    <div class="video-container">
+        <h2>💑 Our Special Moments 💑</h2>
+        <div class="video-love">
+            <iframe 
+                width="756" 
+                height="450" 
+                src="https://www.youtube.com/embed/02BwoGJfdPE" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <div class="photo-slider" id="slider3">
+        
+        <div class="photo-container">
+            <div class="photo-frame">
+                <div class="photo-front">
+                    <img src="/image/S__15007779_0.jpg" alt="ภาพที่ 1" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
+                </div>
+                <div class="photo-back">
+                    <p>อยากเที่ยว เฟ่สุดๆ อันนี้ ไปไหนก็ได้แต่เกียมถ่ายรูป เต็มระบบ </p>
+                </div>
+            </div>
+        </div>
+    
+        <div class="photo-container">
+            <div class="photo-frame">
+                <div class="photo-front">
+                    <img src="/image/S__15007782_0.jpg" alt="ภาพที่ 2" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
+                </div>
+                <div class="photo-back">
+                    <p>รูปนี้ดีสุดของการที่เราไปเที่ยวแยะ 5554245 </p>
+                </div>
+            </div>
+        </div>
+    
+        <div class="photo-container">
+            <div class="photo-frame">
+                <div class="photo-front">
+                    <img src="/image/S__15007781_0.jpg" alt="ภาพที่ 3" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
+                </div>
+                <div class="photo-back">
+                    <p>อันนี้อยากถ่ายให้แฟนมาก แต่เค้าร้อนมาก 55555 แถมมือปิดแฟลชอีก </p>
+                </div>
+            </div>
+        </div>
+    
+    </div>
+
+    <div class="message">
+        <h2>💝 ขอบคุณที่อยู่กะเค้านะ 💝</h2>
+        <p> ขอบคุณที่อยู่กะเค้ามาตลอด ไปเที่ยว ให้กำลังใจหาของกิน 
+            <br> อยู่เป็นกำลังใจให้กันไปนานๆ นะเธออออ
+            <br> ขอบคุณที่อยู่ข้างเค้าเสมอ เค้าก็จะอยู่ข้างเธอเหมือนกัน 
+            <br> ตั้งใจทำสุดๆแยะนะอันนี้ คนมันไม่เก่งอ่ะทำได้แค่นี้ 5555
+        </p>
+    </div>
+
+    <div class="video-container">
+        <h2>💑 Our Special Moments 💑</h2>
+        <div class="video-love">
+            <iframe 
+                width="756" 
+                height="450" 
+                src="https://www.youtube.com/embed/VnJWzACEVKI" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+
+    <button class="love-btn" onclick="showLove()">รักเธอมากๆนะ 💖</button>
+    
+    <button class="music-toggle" onclick="toggleMusic()">🎵</button>
+
+    <script>
+        const sliderStates = {
+         slider1: 0,
+         slider2: 0,
+        slider3: 0
+        };
+
+
+        // Loading screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.querySelector('.loader').classList.add('fade-out');
+            }, 1000);
+        });
+
+        // Backgroun
+
+
+// Background music
+        let audio = new Audio('/music/มาเจสติก.mp3');
+        audio.loop = true;
+        let isMusicPlaying = false;
+
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                audio.pause();
+                document.querySelector('.music-toggle').textContent = '🎵';
+            } else {
+                audio.play();
+                document.querySelector('.music-toggle').textContent = '⏸';
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+ 
+
+        // Enhanced heart animation
+        function showLove() {
+            const isMobile = window.innerWidth <= 768;
+            const heartCount = isMobile ? 8 : 15;
+            
+            for(let i = 0; i < heartCount; i++) {
+                setTimeout(() => {
+                    createHeart();
+                }, i * 200);
+            }
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.innerHTML = ['💖', '💝', '💕', '💗'][Math.floor(Math.random() * 4)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = '100vh';
+            heart.style.opacity = '1';
+            document.body.appendChild(heart);
+            
+            const animation = heart.animate([
+                { 
+                    transform: 'translateY(0vh) scale(1) rotate(0deg)',
+                    opacity: 1
+                },
+                { 
+                    transform: `translateY(-120vh) scale(${0.5 + Math.random()}) rotate(${Math.random() * 360}deg)`,
+                    opacity: 0
+                }
+            ], {
+                duration: 3000 + Math.random() * 1000,
+                easing: 'ease-out'
+            });
+            
+            animation.onfinish = () => heart.remove();
+        }
+
+        // Parallax scrolling effect
+        window.addEventListener('scroll', () => {
+            const messages = document.querySelectorAll('.message');
+            messages.forEach(message => {
+                const rect = message.getBoundingClientRect();
+                const isVisible = (rect.top >= 0 && rect.bottom <= window.innerHeight);
+                
+                if (isVisible) {
+                    const scrolled = window.pageYOffset;
+                    message.style.transform = `translateY(${scrolled * 0.1}px)`;
+                }
+            });
+        });
+
+        // Touch device support
+        document.addEventListener('DOMContentLoaded', function() {
+            const containers = document.querySelectorAll('.photo-container');
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            containers.forEach(container => {
+                container.addEventListener('touchstart', function(e) {
+                    touchStartX = e.changedTouches[0].screenX;
+                });
+
+                container.addEventListener('touchend', function(e) {
+                    touchEndX = e.changedTouches[0].screenX;
+                    handleSwipe();
+                });
+            });
+
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                if (touchEndX < touchStartX - swipeThreshold) {
+                    slidePhotos('right');
+                }
+                if (touchEndX > touchStartX + swipeThreshold) {
+                    slidePhotos('left');
+                }
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                slidePhotos('left');
+            } else if (e.key === 'ArrowRight') {
+                slidePhotos('right');
+            }
+        });
+
+        // Initialize positions
+        slidePhotos('right');
+
+        // Handle window resize
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                slidePhotos('right');
+            }, 100);
+        });
+
+        // Periodic heart animation
+        const heartInterval = window.innerWidth <= 768 ? 5000 : 3000;
+        setInterval(() => {
+            if (Math.random() < 0.3) { // 30% chance to create a heart
+                createHeart();
+            }
+        }, heartInterval);
+
+        // Add smooth scroll to top
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        
+    </script>
+</body>
+</html>

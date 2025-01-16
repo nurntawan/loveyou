@@ -1,0 +1,141 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 400px;
+}
+
+.display {
+    background: #e8f0fe;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.pins {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.pin {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ccc;
+    transition: background-color 0.3s;
+}
+
+.pin.filled {
+    background: #ff8fa3;
+}
+
+.keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.key {
+    aspect-ratio: 1;
+    border: none;
+    background: white;
+    font-size: 1.5rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.key:hover {
+    background: #f0f0f0;
+    transform: translateY(-2px);
+}
+
+.key:active {
+    transform: translateY(1px);
+}
+
+.action-btn {
+    grid-column: span 3;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    background: #ff8fa3;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.action-btn:hover {
+    background: #ff7c93;
+}
+
+.action-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.message {
+    color: #ff4757;
+    text-align: center;
+    margin-top: 10px;
+    min-height: 20px;
+    font-size: 1.1rem;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.title {
+    text-align: center;
+    color: #ff8fa3;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.shake {
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+    }
+
+    .key {
+        font-size: 1.2rem;
+    }
+}
